@@ -4,33 +4,24 @@ const fs = require("fs-extra");
 const path = require("path");
 const program = require('commander');
 const { prompt } = require('inquirer');
+const clone = require('git-clone');
+const util = require("util");
 
-const copyCode = (dir) => {
+const cloneAsync = util.promisify(clone);
+
+const copyCode = async (dir) => {
   console.log("Installing Velzy in", dir);
   const codePath = path.resolve(__dirname, "../");
   const installPath = path.resolve(dir, "velzy");
 
   fs.mkdirSync(installPath);
+  await cloneAsync("https://github.com/velzyapp/api", installPath);
 
-  let dirsToCopy = fs.readdirSync(codePath);
-
-  //we don't want everything so...
-  dirsToCopy = dirsToCopy.filter(d => {
-    return d !== "node_modules" &&
-    d !== "cli" &&
-    d !== ".nuxt"
-  });
-
-
-
-  for(d of dirsToCopy){
-    const from = path.resolve(__dirname, "../", d);
-    const to = path.resolve(installPath, d);
-    fs.copySync(from,to);
-    console.log(d);
-  }
+  //add a .env file
+  fs.writeFileSync(path.resolve(installPath, ".env"), "DATABASE_URL=postgres://localhost/velzy");
 
   console.log("DONE!");
+
 }
 
 const installDB = (conn) => {
@@ -82,12 +73,20 @@ program
   .action(dir => {
     const installDir = path.resolve(process.cwd(), dir)
     //copy Velzy source
-    copyCode(installDir);
+    copyCode(installDir).then(res => {
+      console.log("--------------------------------------");
+      console.log("");
+      console.log("cd velzy");
+      console.log("npm install");
+      console.log("");
+      console.log("--------------------------------------");
+      console.log("There's also a .env file in the root with a DATABASE_URL defaulted to localhost/velzy postgres database. You'll need to update that OR create a local database called Velzy.");
+      console.log("Have fun!");
+      console.log("");
+    }).catch(err => {
+      console.error("There's already a velzy directory here. Won't overwrite.");
+    });
 
-    console.log("--------------------------------------");
-    console.log("");
-    console.log("cd velzy");
-    console.log("npm install");
   });
 
 program.parse(process.argv);

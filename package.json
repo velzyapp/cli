@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/velzyapp/cli/issues"
   },
-  "homepage": "https://github.com/velzyapp/cli#readme"
+  "homepage": "https://github.com/velzyapp/cli#readme",
+  "dependencies": {
+    "commander": "^3.0.0",
+    "fs-extra": "^8.1.0",
+    "git-clone": "^0.1.0",
+    "inquirer": "^6.5.1"
+  }
 }
