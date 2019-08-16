@@ -1,0 +1,19 @@
+{
+  "name": "velzy",
+  "version": "0.0.2",
+  "description": "The Velzy CLI for doing amazing things",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/velzyapp/cli.git"
+  },
+  "author": "Rob Conery",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/velzyapp/cli/issues"
+  },
+  "homepage": "https://github.com/velzyapp/cli#readme"
+}
